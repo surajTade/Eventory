@@ -12,11 +12,13 @@ const Navbar = () => {
 
   return (
     <div
-      className={`sticky py-2 px-6 m-auto md:mt-4 flex max-md:w-full w-full justify-between items-center md:rounded-lg border border-[#343434] bg-opacity-50 backdrop-blur-lg backdrop-filter ${
+      className={`sticky py-2 px-6 m-auto flex max-md:w-full w-full justify-between items-center md:rounded-lg border border-[#343434] bg-opacity-50 backdrop-blur-lg backdrop-filter ${
         theme === "dark" ? "bg-[#0a0a0a]" : "bg-white hover:text-[#2e2e2e]"
       }`}
     >
-      <a className="text-2xl cursor-pointer font-semibold">Eventory</a>
+      <a className="text-2xl cursor-pointer font-semibold" href="/">
+        Eventory
+      </a>
       <div className="flex gap-6 max-lg:text-sm text-base items-center">
         <a
           className="cursor-pointer"

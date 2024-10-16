@@ -7,17 +7,13 @@ import NotFoundPage from "./error/NotFoundPage";
 import Home from "../pages/Home";
 import Navbar from "./Navbar";
 import { ThemeProvider } from "../Context/ThemeContext";
+import CreateEvent from "../pages/Events/CreateEvent";
+import { UserProvider } from "../Context/UserContext";
+import ListEvents from "../pages/Events/ListEvents";
+import ProtectedRoute from "./ProtectedRoute"; // Import the ProtectedRoute
 
 const Body = () => {
   const appRouter = createBrowserRouter([
-    {
-      path: "/login",
-      element: <Home />,
-    },
-    {
-      path: "/register",
-      element: <Home />,
-    },
     {
       path: "/home",
       element: <Home />,
@@ -27,16 +23,72 @@ const Body = () => {
       element: <Navigate to="/home" />,
     },
     {
+      path: "/user",
+      children: [
+        {
+          path: "event",
+          element: (
+            <ProtectedRoute>
+              <CreateEvent />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "manage-event",
+          element: (
+            <ProtectedRoute>
+              <CreateEvent />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "bookmarks",
+          element: (
+            <ProtectedRoute>
+              <CreateEvent />
+            </ProtectedRoute>
+          ),
+        },
+      ],
+    },
+    {
+      path: "/events",
+      children: [
+        {
+          path: "list",
+          element: <ListEvents />,
+        },
+        {
+          path: "create",
+          element: (
+            <ProtectedRoute>
+              <CreateEvent />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "bookmarks",
+          element: (
+            <ProtectedRoute>
+              <CreateEvent />
+            </ProtectedRoute>
+          ),
+        },
+      ],
+    },
+    {
       path: "*",
       element: <NotFoundPage />,
     },
   ]);
 
   return (
-    <ThemeProvider>
-      <Navbar />
-      <RouterProvider router={appRouter} />
-    </ThemeProvider>
+    <UserProvider>
+      <ThemeProvider>
+        <Navbar />
+        <RouterProvider router={appRouter} />
+      </ThemeProvider>
+    </UserProvider>
   );
 };
 

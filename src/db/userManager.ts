@@ -1,12 +1,11 @@
 import firebase from "firebase/compat/app";
 import { User } from "../utils/validations";
-import { db } from "./firebase";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, getFirestore } from "firebase/firestore";
+import { app } from "./firebase";
 
 const addUser = async (user: User) => {
   try {
-    console.log("here");
-
+    const db = getFirestore(app);
     const userCollection = collection(db, "users");
 
     await addDoc(userCollection, {

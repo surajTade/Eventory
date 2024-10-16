@@ -1,11 +1,18 @@
 import Button from "../components/Button";
 import Features from "../components/Features";
-import { addUser } from "../db/userManager";
+import { useNavigate } from "react-router-dom";
+import { useUser } from "../Context/UserContext";
 
 const Home = () => {
+  const navigate = useNavigate();
+  const { user, login } = useUser();
+  const checkLoginAndRedirect = (): void => {
+    user ? navigate("/user/event") : login();
+  };
+
   return (
     <>
-      <div className="mt-20 md:mt-36">
+      <div className="mt-20 md:mt-30">
         <div>
           <h1 className="bg-opacity-50 text-center text-4xl font-bold max-md:text-3xl md:text-6xl xl:text-7xl">
             From Your Ideas to Local Happenings: <br /> Connect, List, and
@@ -20,21 +27,14 @@ const Home = () => {
         <div className="mt-10 w-full flex items-center justify-center gap-4 md:gap-10">
           <Button
             className="rounded-full px-8 py-3 lg:text-lg font-normal"
-            onClick={() =>
-              addUser({
-                userId: "",
-                email: "",
-                displayName: "",
-                notificationsEnabled: false,
-                role: "",
-                createdAt: new Date(),
-                lastLogin: new Date(),
-              })
-            }
+            onClick={() => navigate("/events/list")}
           >
             Explore Events
           </Button>
-          <Button className="rounded-full px-8 py-3 lg:text-lg font-normal">
+          <Button
+            onClick={() => checkLoginAndRedirect()}
+            className="rounded-full px-8 py-3 lg:text-lg font-normal"
+          >
             Create Events
           </Button>
         </div>

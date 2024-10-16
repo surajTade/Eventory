@@ -2,7 +2,7 @@ import featureList from "../utils/featureList";
 
 const Features = () => {
   return (
-    <div className="mt-20 w-full" id={"features"}>
+    <div className="mt-20 md:mt-28 w-full" id={"features"}>
       <h2 className="text-3xl md:text-5xl uppercase font-bold text-center">
         Features
       </h2>
