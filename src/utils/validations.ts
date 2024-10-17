@@ -1,4 +1,5 @@
 import { array, boolean, date, InferType, number, object, string } from "yup";
+import { INVITE_ONLY, PRIVATE, PUBLIC } from "./constants";
 
 const userSchema = object({
   userId: string().required(),
@@ -60,9 +61,7 @@ const eventSchema = object({
   createdAt: date().default(() => new Date()), // Creation timestamp
   updatedAt: date().default(() => new Date()), // Update timestamp
 
-  visibility: string()
-    .oneOf(["public", "private", "invite-only"])
-    .default("public"), // Default public event
+  visibility: string().oneOf([PUBLIC, PRIVATE, INVITE_ONLY]).default(PUBLIC), // Default public event
   eventImage: string().url().nullable(), // Optional image URL
 });
 

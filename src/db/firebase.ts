@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import "firebase/firestore";
+import { collection, getFirestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -14,4 +15,10 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-export { app };
+const db = getFirestore(app);
+
+const eventCollection = collection(db, "event");
+
+const userCollection = collection(db, "user");
+
+export { app, eventCollection, userCollection };
