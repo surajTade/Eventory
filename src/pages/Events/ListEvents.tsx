@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getAllPublicEvent } from "../../db/eventManager";
 import { DocumentData } from "firebase/firestore";
-import { Image } from "lucide-react";
+import EventCard from "../../components/event/EventCard";
 
 const ListEvents = () => {
   const [events, setEvents] = useState<DocumentData[]>([]);
@@ -20,16 +20,20 @@ const ListEvents = () => {
 
   return (
     <div className="">
-      All PUBLIC EVENTS
-      <ul className="w-full">
+      <p className="text-center text-4xl my-6 mb-12 font-extrabold">
+        PUBLIC EVENTS
+      </p>
+      <div className="ml-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-between items-center gap-12">
         {events.map((event) => (
-          <li className="border-b border-b-slate-400" key={event.eventId}>
-            <span>{event.title}</span>
-            <p>{event.description}</p>
-            <img src={event.eventImage} />
-          </li>
+          <EventCard
+            key={event.eventId}
+            name={event.title}
+            description={event.description}
+            isOnline={event.isOnline}
+            date={new Date(event.startDate.seconds)}
+          />
         ))}
-      </ul>
+      </div>
     </div>
   );
 };

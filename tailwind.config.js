@@ -2,7 +2,11 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        "event-card-bg": "url('/src/assets/event-card-bg.jpg')",
+      },
+    },
   },
   plugins: [],
 };
