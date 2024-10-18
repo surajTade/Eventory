@@ -11,7 +11,7 @@ import CreateEvent from "../pages/event/CreateEvent";
 import { UserProvider } from "../Context/UserContext";
 import ListEvents from "../pages/event/ListEvents";
 import ProtectedRoute from "./ProtectedRoute"; // Import the ProtectedRoute
-import Signup from "./Signup";
+import Login from "./Login";
 
 const Body = () => {
   const appRouter = createBrowserRouter([
@@ -28,7 +28,7 @@ const Body = () => {
       children: [
         {
           path: "login",
-          element: <Signup />,
+          element: <Login />,
         },
         {
           path: "event",

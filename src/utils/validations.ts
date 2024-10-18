@@ -39,7 +39,7 @@ const eventSchema = object({
   startDate: date().required(),
   endDate: date()
     //@ts-ignore
-    .min(date().ref("startDate"), "End date cannot be before start date")
+    // .min(date().ref("startDate"), "End date cannot be before start date")
     .required(), // Ensures endDate is after startDate
 
   isFree: boolean().default(true), // If true, price is not required

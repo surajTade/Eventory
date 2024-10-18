@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../Context/ThemeContext";
 import { useUser } from "../Context/UserContext";
+import { useEffect } from "react";
 
-const Signup = () => {
-  const { login } = useUser();
+const Login = () => {
+  const { user, loading, login } = useUser();
   const { theme } = useTheme();
   const navigate = useNavigate();
-  const bgColor = theme == "light" ? "bg-white" : "dark:bg-gray-800";
   const textColor = theme == "light" ? "text-gray-600" : "text-gray-200";
   const loginAndRedirect = (): void => {
     try {
@@ -16,6 +16,10 @@ const Signup = () => {
       console.error("Failed to login!");
     }
   };
+
+  useEffect(() => {
+    if (user) navigate("/");
+  }, [loading]);
 
   return (
     <div className="flex h-[80vh] items-center justify-center">
@@ -65,4 +69,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default Login;

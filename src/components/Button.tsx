@@ -14,7 +14,7 @@ interface ButtonProps {
 }
 
 const baseStyles =
-  "inline-flex items-center rounded-md border border-white px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black transition duration-300 ease-in-out";
+  "inline-flex items-center justify-center rounded-md border border-white px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black transition duration-300 ease-in-out";
 
 const variantStyles = {
   primary: "bg-zinc-400 hover:bg-slate-800 border-transparent",

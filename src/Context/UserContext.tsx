@@ -18,6 +18,7 @@ interface UserContextType {
   user: User | undefined;
   login: () => void;
   logout: () => void;
+  loading: boolean; // Add loading state
 }
 
 // Define a default value for the context
@@ -25,6 +26,7 @@ const defaultUserContext: UserContextType = {
   user: undefined,
   login: () => {},
   logout: () => {},
+  loading: true, // Default to loading
 };
 
 // Create the UserContext with default values
@@ -38,6 +40,7 @@ export const useUser = () => {
 // Create the UserProvider component
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | undefined>(undefined);
+  const [loading, setLoading] = useState(true); // New loading state
   const [appInitialized, setAppInitialized] = useState(false);
 
   useEffect(() => {
@@ -46,21 +49,25 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       setAppInitialized(true);
     }
     const fetchUser = async () => {
+      setLoading(true); // Set loading to true while fetching the user
       const storedUser = localStorage.getItem("user");
       if (storedUser) {
         setUser(JSON.parse(storedUser));
       }
+      setLoading(false); // Set loading to false after fetching the user
     };
     fetchUser();
   }, []);
 
   const login = async () => {
+    setLoading(true); // Set loading to true while signing in
     const provider = new GoogleAuthProvider();
     const auth = getAuth();
     const result = await signInWithPopup(auth, provider);
 
     if (result == null) {
       console.log("Error while signIn: result not found");
+      setLoading(false); // Reset loading on failure
       return;
     }
 
@@ -68,13 +75,14 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
     if (credential == null) {
       console.log("Error while signIn: Credentials not found");
+      setLoading(false); // Reset loading on failure
       return;
     }
 
     const user = result.user;
-
     setUser(user);
     localStorage.setItem("user", JSON.stringify(user));
+    setLoading(false); // Set loading to false after signing in
   };
 
   const logout = () => {
@@ -83,7 +91,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <UserContext.Provider value={{ user, login, logout }}>
+    <UserContext.Provider value={{ user, login, logout, loading }}>
       {children}
     </UserContext.Provider>
   );
