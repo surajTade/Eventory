@@ -1,7 +1,7 @@
 import { INVITE_ONLY, PRIVATE, PUBLIC } from "../utils/constants";
 import { addEvent } from "./eventManager";
 
-const addEvents = async () => {
+const seedEvents = async () => {
   await addEvent({
     eventId: "evt001",
     title: "Jazz Night",
@@ -129,3 +129,5 @@ const addEvents = async () => {
     eventImage: "https://example.com/images/yoga-retreat.jpg",
   });
 };
+
+export { seedEvents };

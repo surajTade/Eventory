@@ -5,9 +5,9 @@ import { useUser } from "../Context/UserContext";
 
 const Home = () => {
   const navigate = useNavigate();
-  const { user, login } = useUser();
+  const { user } = useUser();
   const checkLoginAndRedirect = (): void => {
-    user ? navigate("/user/event") : login();
+    user ? navigate("/user/event") : navigate("/user/login");
   };
 
   return (
@@ -26,14 +26,14 @@ const Home = () => {
         </div>
         <div className="mt-10 w-full flex items-center justify-center gap-4 md:gap-10">
           <Button
-            className="rounded-full px-8 py-3 lg:text-lg font-normal"
+            className="rounded-full px-8 py-3 text-xs lg:text-lg font-normal"
             onClick={() => navigate("/events/list")}
           >
             Explore Events
           </Button>
           <Button
             onClick={() => checkLoginAndRedirect()}
-            className="rounded-full px-8 py-3 lg:text-lg font-normal"
+            className="rounded-full px-8 py-3 text-xs lg:text-lg font-normal"
           >
             Create Events
           </Button>

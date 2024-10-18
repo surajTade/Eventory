@@ -7,10 +7,11 @@ import NotFoundPage from "./error/NotFoundPage";
 import Home from "../pages/Home";
 import Navbar from "./Navbar";
 import { ThemeProvider } from "../Context/ThemeContext";
-import CreateEvent from "../pages/Events/CreateEvent";
+import CreateEvent from "../pages/event/CreateEvent";
 import { UserProvider } from "../Context/UserContext";
-import ListEvents from "../pages/Events/ListEvents";
+import ListEvents from "../pages/event/ListEvents";
 import ProtectedRoute from "./ProtectedRoute"; // Import the ProtectedRoute
+import Signup from "./Signup";
 
 const Body = () => {
   const appRouter = createBrowserRouter([
@@ -26,15 +27,11 @@ const Body = () => {
       path: "/user",
       children: [
         {
-          path: "event",
-          element: (
-            <ProtectedRoute>
-              <CreateEvent />
-            </ProtectedRoute>
-          ),
+          path: "login",
+          element: <Signup />,
         },
         {
-          path: "manage-event",
+          path: "event",
           element: (
             <ProtectedRoute>
               <CreateEvent />

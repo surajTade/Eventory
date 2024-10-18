@@ -21,7 +21,7 @@ const Navbar = () => {
       </a>
       <div className="flex gap-6 max-lg:text-sm text-base items-center">
         <a
-          className="cursor-pointer"
+          className="cursor-pointer hidden sm:block"
           onClick={(e) => {
             e.preventDefault();
             const section = document.getElementById("features");
@@ -33,13 +33,11 @@ const Navbar = () => {
         <a className="cursor-pointer">
           <Github size={18} />
         </a>
-        <div className="flex items-center gap-2">
-          {theme === "dark" ? (
-            <Sun size={16} onClick={toggleTheme} />
-          ) : (
-            <Moon size={16} onClick={toggleTheme} />
-          )}
-        </div>
+        {theme === "dark" ? (
+          <Sun size={16} onClick={toggleTheme} />
+        ) : (
+          <Moon size={16} onClick={toggleTheme} />
+        )}
       </div>
     </div>
   );
