@@ -17,8 +17,7 @@ const userSchema = object({
   lastLogin: date().default(() => new Date()),
 });
 
-const eventSchema = object({
-  eventId: string().required(),
+const eventSchema = object().shape({
   title: string().required(),
   description: string().required(),
   eventType: string().required(), // e.g., "music", "conference", etc.
@@ -61,12 +60,14 @@ const eventSchema = object({
   createdAt: date().default(() => new Date()), // Creation timestamp
   updatedAt: date().default(() => new Date()), // Update timestamp
 
-  visibility: string().oneOf([PUBLIC, PRIVATE, INVITE_ONLY]).default(PUBLIC), // Default public event
   eventImage: string().url().nullable(), // Optional image URL
+  visibility: string().oneOf([PUBLIC, PRIVATE, INVITE_ONLY]).default(PUBLIC), // Default public event
 });
+
+const createEvent = eventSchema.partial();
 
 type User = InferType<typeof userSchema>;
 type Event = InferType<typeof eventSchema>;
 
-export { userSchema, eventSchema };
+export { userSchema, eventSchema, createEvent };
 export type { User, Event };

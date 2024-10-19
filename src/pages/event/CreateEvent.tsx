@@ -1,43 +1,80 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import Button from "../../components/Button";
+import { Event } from "../../utils/validations";
+import { addEvent } from "../../db/eventManager";
+import { useUser } from "../../Context/UserContext";
+import { INVITE_ONLY, PRIVATE, PUBLIC } from "../../utils/constants";
+
+const formFields = [
+  { name: "title", label: "Title", placeholder: "Title of your event" },
+  {
+    name: "description",
+    label: "Description",
+    placeholder: "A short description about your event",
+  },
+  { name: "eventType", label: "Event Type", placeholder: "Event category" },
+];
 
 const CreateEvent = () => {
+  const { user } = useUser();
+
+  const initialValues = {
+    title: "",
+    description: "",
+    eventType: "",
+    isOnline: true,
+    location: "",
+    startDate: "",
+    endDate: "",
+    isFree: true,
+    price: 0,
+    capacity: 10,
+    eventImage: "",
+    visibility: PUBLIC,
+  };
+
+  const handleSubmit = async (
+    values: typeof initialValues,
+    { resetForm }: any
+  ) => {
+    const date = new Date();
+    const createEventValues: Event = {
+      ...values,
+      organizerId: user!.uid,
+      attendeesCount: 0,
+      createdAt: date,
+      updatedAt: date,
+      startDate: new Date(values.startDate),
+      endDate: new Date(values.endDate),
+      visibility:
+        values.visibility === PUBLIC
+          ? PUBLIC
+          : values.visibility === PRIVATE
+          ? PRIVATE
+          : INVITE_ONLY,
+    };
+
+    await addEvent(createEventValues);
+    console.log("Event added successfully");
+    resetForm();
+  };
+
   return (
     <div className="mt-6 mx-auto p-6 bg-white border w-full rounded shadow-md">
       <h1 className="text-3xl text-center uppercase font-bold mb-4">
         Add Event
       </h1>
-      <Formik
-        initialValues={{
-          title: "",
-          description: "",
-          eventType: "",
-          isOnline: true,
-          location: "",
-          startDate: "",
-          endDate: "",
-          isFree: true,
-          price: 0,
-          capacity: 10,
-          eventImage: "",
-          visibility: "PUBLIC",
-        }}
-        // validationSchema={eventSchema}
-        onSubmit={(values) => {
-          console.log("Form Values:", values);
-          // TODO: Handle form submission (e.g., API call)
-        }}
-      >
-        {({ values, setFieldValue }) => (
+      <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+        {({ values }) => (
           <Form className="space-y-4">
-            {[
-              { name: "title", label: "Title" },
-              { name: "description", label: "Description" },
-              { name: "eventType", label: "Event Type" },
-            ].map(({ name, label }) => (
+            {formFields.map(({ name, label, placeholder }) => (
               <div key={name} className="form-group">
                 <label className="block mb-1 font-medium">{label}</label>
-                <Field name={name} className="w-full p-2 border rounded" />
+                <Field
+                  name={name}
+                  className="w-full p-2 border rounded"
+                  placeholder={placeholder}
+                />
                 <ErrorMessage
                   name={name}
                   component="div"
@@ -149,9 +186,9 @@ const CreateEvent = () => {
                 name="visibility"
                 className="w-full p-2 border rounded"
               >
-                <option value="PUBLIC">Public</option>
-                <option value="PRIVATE">Private</option>
-                <option value="INVITE_ONLY">Invite Only</option>
+                <option value={PUBLIC}>Public</option>
+                <option value={PRIVATE}>Private</option>
+                <option value={INVITE_ONLY}>Invite Only</option>
               </Field>
               <ErrorMessage
                 name="visibility"

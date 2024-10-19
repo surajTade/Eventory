@@ -12,6 +12,7 @@ import { UserProvider } from "../Context/UserContext";
 import ListEvents from "../pages/event/ListEvents";
 import ProtectedRoute from "./ProtectedRoute"; // Import the ProtectedRoute
 import Login from "./Login";
+import { ValidationSchemaExample } from "../pages/event/test";
 
 const Body = () => {
   const appRouter = createBrowserRouter([
@@ -35,6 +36,7 @@ const Body = () => {
           element: (
             <ProtectedRoute>
               <CreateEvent />
+              {/* <ValidationSchemaExample /> */}
             </ProtectedRoute>
           ),
         },
