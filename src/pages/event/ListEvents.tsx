@@ -26,7 +26,7 @@ const ListEvents = () => {
       <div className="ml-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-between items-center gap-12">
         {events.map((event) => (
           <EventCard
-            key={event.eventId}
+            key={event.title}
             name={event.title}
             description={event.description}
             isOnline={event.isOnline}

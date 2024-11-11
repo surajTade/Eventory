@@ -1,4 +1,13 @@
-import { array, boolean, date, InferType, number, object, string } from "yup";
+import {
+  array,
+  boolean,
+  date,
+  InferType,
+  number,
+  object,
+  ref,
+  string,
+} from "yup";
 import { INVITE_ONLY, PRIVATE, PUBLIC } from "./constants";
 
 const userSchema = object({
@@ -17,8 +26,8 @@ const userSchema = object({
   lastLogin: date().default(() => new Date()),
 });
 
-const eventSchema = object().shape({
-  title: string().required(),
+const eventSchema = object({
+  title: string().required().max(30),
   description: string().required(),
   eventType: string().required(), // e.g., "music", "conference", etc.
   organizerId: string().required(), // The userId of the event creator
@@ -29,16 +38,15 @@ const eventSchema = object().shape({
   location: string()
     .url()
     .when("isOnline", {
-      //@ts-ignore
-      is: false, // If the event is not online, expect a location link
-      then: string().required("Location is required for offline events."),
-      otherwise: string().url().nullable(), // Allow for a URL for online events
+      is: (isOnline: boolean) => !isOnline,
+      then: (schema) =>
+        schema.required("Location is required for offline events."),
+      otherwise: (schema) => schema.nullable(), // Allow for a URL for online events
     }),
 
   startDate: date().required(),
   endDate: date()
-    //@ts-ignore
-    // .min(date().ref("startDate"), "End date cannot be before start date")
+    .min(ref("startDate"), "End date cannot be before start date")
     .required(), // Ensures endDate is after startDate
 
   isFree: boolean().default(true), // If true, price is not required
@@ -46,15 +54,14 @@ const eventSchema = object().shape({
   price: number()
     .nullable()
     .when("isFree", {
-      //@ts-ignore
-      is: false, // If the event is not free, require a positive price
-      then: number().required().positive("Price must be positive"),
-      otherwise: number().nullable(),
+      is: (isFree: boolean) => !isFree,
+      then: (schema) => schema.required().positive("Price must be positive"),
+      otherwise: (schema) => schema.nullable(),
     }),
 
   capacity: number().positive().integer().nullable(), // Max attendees (optional)
 
-  attendees: array(string()).nullable(), // Attendee userIds
+  attendees: array().of(string()).nullable(), // Attendee userIds
   attendeesCount: number().integer().default(0), // Default 0 attendees
 
   createdAt: date().default(() => new Date()), // Creation timestamp
@@ -64,10 +71,8 @@ const eventSchema = object().shape({
   visibility: string().oneOf([PUBLIC, PRIVATE, INVITE_ONLY]).default(PUBLIC), // Default public event
 });
 
-const createEvent = eventSchema.partial();
-
 type User = InferType<typeof userSchema>;
 type Event = InferType<typeof eventSchema>;
 
-export { userSchema, eventSchema, createEvent };
+export { userSchema, eventSchema };
 export type { User, Event };

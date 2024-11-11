@@ -1,9 +1,10 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import Button from "../../components/Button";
-import { Event } from "../../utils/validations";
+import { Event, eventSchema } from "../../utils/validations";
 import { addEvent } from "../../db/eventManager";
 import { useUser } from "../../Context/UserContext";
 import { INVITE_ONLY, PRIVATE, PUBLIC } from "../../utils/constants";
+import Notification from "../../components/Notifications/NotificationContainer";
 
 const formFields = [
   { name: "title", label: "Title", placeholder: "Title of your event" },
@@ -19,44 +20,46 @@ const CreateEvent = () => {
   const { user } = useUser();
 
   const initialValues = {
+    organizerId: "0",
     title: "",
     description: "",
     eventType: "",
     isOnline: true,
-    location: "",
+    location: "http://defaultloc.com",
     startDate: "",
     endDate: "",
     isFree: true,
-    price: 0,
+    price: 10,
     capacity: 10,
-    eventImage: "",
+    eventImage: "http://defaultimage.com",
     visibility: PUBLIC,
   };
 
-  const handleSubmit = async (
-    values: typeof initialValues,
-    { resetForm }: any
-  ) => {
-    const date = new Date();
-    const createEventValues: Event = {
-      ...values,
-      organizerId: user!.uid,
-      attendeesCount: 0,
-      createdAt: date,
-      updatedAt: date,
-      startDate: new Date(values.startDate),
-      endDate: new Date(values.endDate),
-      visibility:
-        values.visibility === PUBLIC
-          ? PUBLIC
-          : values.visibility === PRIVATE
-          ? PRIVATE
-          : INVITE_ONLY,
-    };
+  const handleSubmit = async (values: typeof initialValues) => {
+    try {
+      const date = new Date();
+      const createEventValues: Event = {
+        ...values,
+        organizerId: user!.uid,
+        attendeesCount: 0,
+        createdAt: date,
+        updatedAt: date,
+        startDate: new Date(values.startDate),
+        endDate: new Date(values.endDate),
+        visibility:
+          values.visibility === PUBLIC
+            ? PUBLIC
+            : values.visibility === PRIVATE
+            ? PRIVATE
+            : INVITE_ONLY,
+      };
 
-    await addEvent(createEventValues);
-    console.log("Event added successfully");
-    resetForm();
+      await addEvent(createEventValues);
+      Notification.success("Event added successfully");
+    } catch (error) {
+      console.error("Error adding event:", error);
+      Notification.error("Failed to add event. Please try again.");
+    }
   };
 
   return (
@@ -64,12 +67,24 @@ const CreateEvent = () => {
       <h1 className="text-3xl text-center uppercase font-bold mb-4">
         Add Event
       </h1>
-      <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={eventSchema}
+        onSubmit={(values, actions) => {
+          setTimeout(() => {
+            handleSubmit(values);
+            actions.setSubmitting(false);
+            actions.resetForm();
+          }, 1000);
+        }}
+      >
         {({ values }) => (
           <Form className="space-y-4">
             {formFields.map(({ name, label, placeholder }) => (
               <div key={name} className="form-group">
-                <label className="block mb-1 font-medium">{label}</label>
+                <label className="block mb-1 font-medium">
+                  {label} <span className="text-red-500">*</span>
+                </label>
                 <Field
                   name={name}
                   className="w-full p-2 border rounded"
@@ -92,7 +107,9 @@ const CreateEvent = () => {
 
             {!values.isOnline && (
               <div className="form-group">
-                <label className="block mb-1 font-medium">Location (URL)</label>
+                <label className="block mb-1 font-medium">
+                  Location (URL) <span className="text-red-500">*</span>
+                </label>
                 <Field name="location" className="w-full p-2 border rounded" />
                 <ErrorMessage
                   name="location"
@@ -103,9 +120,11 @@ const CreateEvent = () => {
             )}
 
             <div className="form-group">
-              <label className="block mb-1 font-medium">Start Date</label>
+              <label className="block mb-1 font-medium">
+                Start Date <span className="text-red-500">*</span>
+              </label>
               <Field
-                type="date"
+                type="datetime-local"
                 name="startDate"
                 className="w-full p-2 border rounded"
               />
@@ -117,9 +136,11 @@ const CreateEvent = () => {
             </div>
 
             <div className="form-group">
-              <label className="block mb-1 font-medium">End Date</label>
+              <label className="block mb-1 font-medium">
+                End Date <span className="text-red-500">*</span>
+              </label>
               <Field
-                type="date"
+                type="datetime-local"
                 name="endDate"
                 className="w-full p-2 border rounded"
               />
@@ -139,7 +160,9 @@ const CreateEvent = () => {
 
             {!values.isFree && (
               <div className="form-group">
-                <label className="block mb-1 font-medium">Price</label>
+                <label className="block mb-1 font-medium">
+                  Price <span className="text-red-500">*</span>
+                </label>
                 <Field
                   name="price"
                   type="number"
