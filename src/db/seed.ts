@@ -3,7 +3,6 @@ import { addEvent } from "./eventManager";
 
 const seedEvents = async () => {
   await addEvent({
-    eventId: "evt001",
     title: "Jazz Night",
     description: "An evening of soulful jazz music with local artists.",
     eventType: "music",
@@ -24,7 +23,6 @@ const seedEvents = async () => {
   });
 
   await addEvent({
-    eventId: "evt002",
     title: "Tech Conference 2024",
     description:
       "Join us for the annual Tech Conference featuring industry leaders.",
@@ -46,7 +44,6 @@ const seedEvents = async () => {
   });
 
   await addEvent({
-    eventId: "evt003",
     title: "Cooking Workshop",
     description: "Learn to cook Italian dishes with Chef Luigi.",
     eventType: "workshop",
@@ -67,7 +64,6 @@ const seedEvents = async () => {
   });
 
   await addEvent({
-    eventId: "evt004",
     title: "Charity Run",
     description: "Participate in a charity run to support local shelters.",
     eventType: "sport",
@@ -88,7 +84,6 @@ const seedEvents = async () => {
   });
 
   await addEvent({
-    eventId: "evt005",
     title: "Photography Exhibition",
     description: "Explore stunning photography from local artists.",
     eventType: "exhibition",
@@ -109,7 +104,6 @@ const seedEvents = async () => {
   });
 
   await addEvent({
-    eventId: "evt006",
     title: "Yoga Retreat",
     description: "A weekend retreat focusing on mindfulness and wellness.",
     eventType: "retreat",

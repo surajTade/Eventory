@@ -21,16 +21,16 @@ const ListEvents = () => {
   return (
     <div className="">
       <p className="text-center text-4xl my-6 mb-12 font-extrabold">
-        PUBLIC EVENTS
+        ACTIVE PUBLIC EVENTS
       </p>
       <div className="ml-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-between items-center gap-12">
         {events.map((event) => (
           <EventCard
-            key={event.title}
+            key={event.id}
             name={event.title}
             description={event.description}
             isOnline={event.isOnline}
-            date={new Date(event.startDate.seconds)}
+            date={new Date(event.startDate.seconds * 1000)}
           />
         ))}
       </div>

@@ -1,9 +1,11 @@
-import { Github, Moon, Sun } from "lucide-react";
-import { useTheme } from "../Context/ThemeContext";
+import { Moon, Sun, User } from "lucide-react";
+import { useTheme } from "../Context/Theme";
 import { useEffect } from "react";
+import { useUser } from "../Context/UserContext";
 
 const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
+  const { user } = useUser();
 
   useEffect(() => {
     document.body.className =
@@ -31,7 +33,20 @@ const Navbar = () => {
           Features
         </a>
         <a className="cursor-pointer">
-          <Github size={18} />
+          {user?.uid ? (
+            <img
+              src={`${user.photoURL}`}
+              width={20}
+              className="rounded-full"
+              title="profile"
+              onClick={() => (window.location.href = "/user/profile")}
+            />
+          ) : (
+            <User
+              size={18}
+              onClick={() => (window.location.href = "/user/login")}
+            />
+          )}
         </a>
         {theme === "dark" ? (
           <Sun size={16} onClick={toggleTheme} />

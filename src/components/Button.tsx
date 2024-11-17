@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
-import { useTheme } from "../Context/ThemeContext";
+import { useTheme } from "../Context/Theme";
 
 interface ButtonProps {
   children: React.ReactNode;

@@ -1,30 +1,43 @@
 import { Event } from "../../utils/validations";
-import { addEvent } from "../../db/eventManager";
+import { addEvent, getSpecificEvent } from "../../db/eventManager";
 import { useUser } from "../../Context/UserContext";
 import { INVITE_ONLY, PRIVATE, PUBLIC } from "../../utils/constants";
 import Notification from "../../components/Notifications/NotificationContainer";
 import EventForm from "../../components/event/EventForm";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
-const CreateEvent = () => {
+const EditEvent = () => {
+  const { id } = useParams();
   const { user } = useUser();
+  const [initialValues, setInitialValues] = useState(null);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const fetchEvent = async () => {
+      try {
+        if (!id) return;
+        const event = await getSpecificEvent(id);
 
-  const initialValues = {
-    organizerId: "0",
-    title: "",
-    description: "",
-    eventType: "",
-    isOnline: true,
-    location: "http://defaultloc.com",
-    startDate: "",
-    endDate: "",
-    isFree: true,
-    price: 10,
-    capacity: 10,
-    eventImage: "http://defaultimage.com",
-    visibility: PUBLIC,
-  };
+        setInitialValues({
+          ...event,
+          startDate: new Date(event.startDate.seconds * 1000)
+            .toISOString()
+            .slice(0, 16),
+          endDate: new Date(event.endDate.seconds * 1000)
+            .toISOString()
+            .slice(0, 16),
+        });
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching event:", error);
+        Notification.error("Failed to load event details.");
+      }
+    };
 
-  const handleSubmit = async (values: typeof initialValues) => {
+    fetchEvent();
+  }, [id]);
+
+  const handleSubmit = async (values: Event) => {
     try {
       const date = new Date();
       const createEventValues: Event = {
@@ -54,11 +67,15 @@ const CreateEvent = () => {
   return (
     <div className="mt-6 mx-auto p-6 bg-white border w-full rounded shadow-md">
       <h1 className="text-3xl text-center uppercase font-bold mb-4">
-        Add Event
+        Edit Event
       </h1>
-      <EventForm initialValues={initialValues} onSubmit={handleSubmit} />
+      {loading ? (
+        <>Loading...</>
+      ) : (
+        <EventForm initialValues={initialValues} onSubmit={handleSubmit} />
+      )}
     </div>
   );
 };
 
-export default CreateEvent;
+export default EditEvent;

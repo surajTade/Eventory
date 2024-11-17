@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useTheme } from "../Context/ThemeContext";
+import { useTheme } from "../Context/Theme";
 import { useUser } from "../Context/UserContext";
 import { useEffect } from "react";
 

@@ -6,12 +6,14 @@ import {
 import NotFoundPage from "./error/NotFoundPage";
 import Home from "../pages/Home";
 import Navbar from "./Navbar";
-import { ThemeProvider } from "../Context/ThemeContext";
+import { ThemeProvider } from "../Context/Theme";
 import CreateEvent from "../pages/event/CreateEvent";
 import { UserProvider } from "../Context/UserContext";
 import ListEvents from "../pages/event/ListEvents";
 import ProtectedRoute from "./ProtectedRoute"; // Import the ProtectedRoute
 import Login from "./Login";
+import Profile from "../pages/user/Profile";
+import EditEvent from "../pages/event/EditEvent";
 
 const Body = () => {
   const appRouter = createBrowserRouter([
@@ -31,11 +33,10 @@ const Body = () => {
           element: <Login />,
         },
         {
-          path: "event",
+          path: "profile",
           element: (
             <ProtectedRoute>
-              <CreateEvent />
-              {/* <ValidationSchemaExample /> */}
+              <Profile />
             </ProtectedRoute>
           ),
         },
@@ -61,6 +62,14 @@ const Body = () => {
           element: (
             <ProtectedRoute>
               <CreateEvent />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "edit/:id",
+          element: (
+            <ProtectedRoute>
+              <EditEvent />
             </ProtectedRoute>
           ),
         },

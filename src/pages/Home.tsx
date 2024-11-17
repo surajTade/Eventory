@@ -7,7 +7,7 @@ const Home = () => {
   const navigate = useNavigate();
   const { user } = useUser();
   const checkLoginAndRedirect = (): void => {
-    user ? navigate("/user/event") : navigate("/user/login");
+    user ? navigate("/events/create") : navigate("/user/login");
   };
 
   return (
