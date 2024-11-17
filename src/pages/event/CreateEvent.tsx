@@ -22,9 +22,10 @@ const CreateEvent = () => {
     capacity: 10,
     eventImage: "http://defaultimage.com",
     visibility: PUBLIC,
+    deleted: false,
   };
 
-  const handleSubmit = async (values: typeof initialValues) => {
+  const handleSubmit = async (values: Event) => {
     try {
       const date = new Date();
       const createEventValues: Event = {

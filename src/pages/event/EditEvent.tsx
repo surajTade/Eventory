@@ -1,5 +1,5 @@
 import { Event } from "../../utils/validations";
-import { addEvent, getSpecificEvent } from "../../db/eventManager";
+import { getSpecificEvent, updateEvent } from "../../db/eventManager";
 import { useUser } from "../../Context/UserContext";
 import { INVITE_ONLY, PRIVATE, PUBLIC } from "../../utils/constants";
 import Notification from "../../components/Notifications/NotificationContainer";
@@ -20,6 +20,8 @@ const EditEvent = () => {
 
         setInitialValues({
           ...event,
+          updatedAt: new Date(event.updatedAt.seconds * 1000),
+          createdAt: new Date(event.createdAt.seconds * 1000),
           startDate: new Date(event.startDate.seconds * 1000)
             .toISOString()
             .slice(0, 16),
@@ -38,14 +40,13 @@ const EditEvent = () => {
   }, [id]);
 
   const handleSubmit = async (values: Event) => {
+    if (!id) return;
     try {
-      const date = new Date();
       const createEventValues: Event = {
         ...values,
         organizerId: user!.uid,
         attendeesCount: 0,
-        createdAt: date,
-        updatedAt: date,
+        updatedAt: new Date(),
         startDate: new Date(values.startDate),
         endDate: new Date(values.endDate),
         visibility:
@@ -56,8 +57,8 @@ const EditEvent = () => {
             : INVITE_ONLY,
       };
 
-      await addEvent(createEventValues);
-      Notification.success("Event added successfully");
+      await updateEvent(id, createEventValues);
+      Notification.success("Event updated successfully");
     } catch (error) {
       console.error("Error adding event:", error);
       Notification.error("Failed to add event. Please try again.");
@@ -70,7 +71,7 @@ const EditEvent = () => {
         Edit Event
       </h1>
       {loading ? (
-        <>Loading...</>
+        <div>Loading...</div>
       ) : (
         <EventForm initialValues={initialValues} onSubmit={handleSubmit} />
       )}

@@ -7,6 +7,7 @@ import {
   getDocs,
   orderBy,
   query,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import { eventCollection } from "./firebase";
@@ -22,6 +23,32 @@ const addEvent = async (event: Event) => {
   }
 };
 
+const updateEvent = async (eventId: string, event: Event) => {
+  try {
+    const docref = doc(eventCollection, eventId);
+    await updateDoc(docref, {
+      event,
+    });
+  } catch (error) {
+    console.error("Error updating event: ", error);
+  }
+};
+
+const setEventAsDeleted = async (eventId: string) => {
+  try {
+    const docref = doc(eventCollection, eventId);
+    const event = await getSpecificEvent(eventId);
+    event.deleted = true;
+
+    if (!event) return;
+    await updateDoc(docref, {
+      event,
+    });
+  } catch (error) {
+    console.log("Error deleting event: ", eventId, error);
+  }
+};
+
 const getAllPublicEvent = async () => {
   try {
     const currentDate = new Date();
@@ -29,7 +56,8 @@ const getAllPublicEvent = async () => {
     const q = query(
       eventCollection,
       where("event.visibility", "==", PUBLIC),
-      where("event.endDate", ">=", currentDate)
+      where("event.endDate", ">=", currentDate),
+      where("event.deleted", "==", false)
     );
     const docs = await getDocs(q);
     const events: DocumentData[] = [];
@@ -69,4 +97,11 @@ const getSpecificEvent = async (eventId: string) => {
   }
 };
 
-export { addEvent, getAllPublicEvent, getUserCreatedEvents, getSpecificEvent };
+export {
+  addEvent,
+  updateEvent,
+  setEventAsDeleted as setEvenetAsDeleted,
+  getAllPublicEvent,
+  getUserCreatedEvents,
+  getSpecificEvent,
+};

@@ -68,7 +68,8 @@ const eventSchema = object({
   updatedAt: date().default(() => new Date()), // Update timestamp
 
   eventImage: string().url().nullable(), // Optional image URL
-  visibility: string().oneOf([PUBLIC, PRIVATE, INVITE_ONLY]).default(PUBLIC), // Default public event
+  visibility: string().oneOf([PUBLIC, PRIVATE, INVITE_ONLY]).default(PUBLIC), // Default public event,
+  deleted: boolean().default(false),
 });
 
 type User = InferType<typeof userSchema>;
