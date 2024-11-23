@@ -1,5 +1,6 @@
 import { useTheme } from "../../Context/Theme";
 import Button from "../Button";
+import EventDetails from "./EventDetails";
 
 const EventCard = ({
   name,
@@ -38,7 +39,13 @@ const EventCard = ({
         <div>
           <span className="text-base font-semibold">{date.toString()}</span>
         </div>
-        <Button className="mt-12">DETAILS</Button>
+        <Button
+          type="button"
+          className="mt-12"
+          onClick={() => <EventDetails event={{}} />}
+        >
+          DETAILS
+        </Button>
       </div>
     </div>
   );

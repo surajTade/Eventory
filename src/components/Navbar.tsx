@@ -1,3 +1,4 @@
+import { Link, useNavigate } from "react-router-dom";
 import { Moon, Sun, User } from "lucide-react";
 import { useTheme } from "../Context/Theme";
 import { useEffect } from "react";
@@ -6,6 +7,7 @@ import { useUser } from "../Context/UserContext";
 const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
   const { user } = useUser();
+  const navigate = useNavigate();
 
   useEffect(() => {
     document.body.className =
@@ -18,9 +20,9 @@ const Navbar = () => {
         theme === "dark" ? "bg-[#0a0a0a]" : "bg-white hover:text-[#2e2e2e]"
       }`}
     >
-      <a className="text-2xl cursor-pointer font-semibold" href="/">
+      <Link to="/" className="text-2xl cursor-pointer font-semibold">
         Eventory
-      </a>
+      </Link>
       <div className="flex gap-6 max-lg:text-sm text-base items-center">
         <a
           className="cursor-pointer hidden sm:block"
@@ -39,15 +41,13 @@ const Navbar = () => {
               width={20}
               className="rounded-full"
               title="profile"
-              onClick={() => (window.location.href = "/user/profile")}
+              onClick={() => navigate("/user/profile")}
             />
           ) : (
-            <User
-              size={18}
-              onClick={() => (window.location.href = "/user/login")}
-            />
+            <User size={18} onClick={() => navigate("/user/login")} />
           )}
         </a>
+
         {theme === "dark" ? (
           <Sun size={16} onClick={toggleTheme} />
         ) : (

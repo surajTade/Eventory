@@ -31,6 +31,7 @@ const eventSchema = object({
   description: string().required(),
   eventType: string().required(), // e.g., "music", "conference", etc.
   organizerId: string().required(), // The userId of the event creator
+  organizerName: string().required(), // The userId of the event creator
 
   isOnline: boolean().default(false), // Indicates if the event is online
 

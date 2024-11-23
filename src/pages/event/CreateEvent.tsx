@@ -10,6 +10,7 @@ const CreateEvent = () => {
 
   const initialValues = {
     organizerId: "0",
+    organizerName: "Anomalous",
     title: "",
     description: "",
     eventType: "",
@@ -31,6 +32,7 @@ const CreateEvent = () => {
       const createEventValues: Event = {
         ...values,
         organizerId: user!.uid,
+        organizerName: user!.displayName || "Anomalous",
         attendeesCount: 0,
         createdAt: date,
         updatedAt: date,
